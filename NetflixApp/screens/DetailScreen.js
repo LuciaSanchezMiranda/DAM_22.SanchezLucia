@@ -9,6 +9,9 @@ import {
   Dimensions,
 } from 'react-native';
 
+import MyListButton from '../components/MyListButton';
+import MyListStatus from '../components/MyListStatus';
+
 const { width } = Dimensions.get('window');
 
 // Datos adicionales por película (simulado)
@@ -27,7 +30,7 @@ const TRAILERS = [
 
 export default function DetailScreen({ navigation, route }) {
   // Recibimos la película desde Home mediante params
-  const { movie } = route.params || {};
+  const movie = route.params?.movie || { id: '1', title: 'El Irlandés', year: '2019', image: 'https://picsum.photos/seed/irishman/120/180' };
 
   const title   = movie?.title  || 'El Irlandés';
   const year    = movie?.year   || '2019';
@@ -98,9 +101,11 @@ export default function DetailScreen({ navigation, route }) {
             <Text style={styles.btnSecondaryText}>⬇   Descargar</Text>
           </Pressable>
 
-          <Pressable style={({ pressed }) => [styles.btnSecondary, pressed && { opacity: 0.85 }]}>
-            <Text style={styles.btnSecondaryText}>+   Mi lista</Text>
+          <MyListButton movie={movie} style={styles.btnSecondary} textStyle={styles.btnSecondaryText} />
+          <Pressable accessibilityRole="button" onPress={() => navigation.navigate('MyList')} style={styles.btnSecondary}>
+            <Text style={styles.btnSecondaryText}>Ver mi lista →</Text>
           </Pressable>
+          <MyListStatus />
 
           {/* Sinopsis */}
           <Text style={styles.synopsis}>

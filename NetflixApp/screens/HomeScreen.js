@@ -7,14 +7,15 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  Dimensions,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+import MyListButton from '../components/MyListButton';
+import MyListStatus from '../components/MyListStatus';
 
 // ─── Datos de ejemplo ───────────────────────────────────────────────────────
 const FEATURED = {
-  id: '1',
+  id: 'featured-stranger-things',
+  year: '2016',
   title: 'STRANGER THINGS',
   genres: 'Terror · Misterio · 16+',
   image: 'https://picsum.photos/seed/stranger/400/220',
@@ -46,7 +47,7 @@ const BECAUSE_YOU_WATCHED = [
 // ─── Componente tarjeta de película ─────────────────────────────────────────
 function MovieCard({ item, onPress }) {
   return (
-    <Pressable onPress={onPress} style={styles.card}>
+    <Pressable accessibilityRole="button" accessibilityLabel={`Ver detalle de ${item.title}`} onPress={onPress} style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.cardImage} />
     </Pressable>
   );
@@ -85,13 +86,14 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.navLink}>Inicio</Text>
           <Text style={styles.navLink}>Series</Text>
           <Text style={styles.navLink}>Películas</Text>
-          <Text style={styles.navLink}>Mi lista</Text>
+          <Pressable accessibilityRole="button" onPress={() => navigation.navigate('MyList')}><Text style={styles.navLink}>Mi lista</Text></Pressable>
         </View>
         <Pressable>
           <Text style={styles.searchIcon}>🔍</Text>
         </Pressable>
       </View>
 
+      <MyListStatus />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Banner destacado */}
         <View style={styles.banner}>
@@ -119,14 +121,7 @@ export default function HomeScreen({ navigation }) {
               >
                 <Text style={styles.btnReproducirText}>▶  Reproducir</Text>
               </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.btnMiLista,
-                  pressed && { opacity: 0.85 },
-                ]}
-              >
-                <Text style={styles.btnMiListaText}>+ Mi lista</Text>
-              </Pressable>
+              <MyListButton movie={FEATURED} style={styles.btnMiLista} textStyle={styles.btnMiListaText} />
             </View>
           </View>
         </View>
